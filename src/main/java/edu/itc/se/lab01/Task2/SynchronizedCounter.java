@@ -4,13 +4,13 @@ public class SynchronizedCounter implements Counter{
     private long count;
 
     @Override
-    public void increment() {
+    public synchronized void increment() {
         count++;
         
     }
 
     @Override
-    public long get() {
+    public synchronized long get() {
         return count;
     }
 

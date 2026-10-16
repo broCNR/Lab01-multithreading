@@ -24,11 +24,7 @@ public class bench {
     }
 
     public static void main(String[] args) throws InterruptedException {
-
-        for (int i = 1; i <= 3; i++) {
-            run("UnsafeCounter #" + i, new UnsafeCounter());
-        }
-
+        run("UnsafeCounter", new UnsafeCounter());
         run("SynchronizedCounter", new SynchronizedCounter());
         run("LockCounter", new LockCounter());
         run("AtomicCounter", new AtomicCounter());
