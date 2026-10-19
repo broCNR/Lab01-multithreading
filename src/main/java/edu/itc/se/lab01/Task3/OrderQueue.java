@@ -5,6 +5,7 @@ public interface OrderQueue {
     Order take() throws InterruptedException;
 }
 
+// Adapter so a java.util.concurrent queue can be used where OrderQueue is expected
 final class BlockingOrderQueue implements OrderQueue {
     private final java.util.concurrent.BlockingQueue<Order> q;
     BlockingOrderQueue(int capacity) { this.q = new java.util.concurrent.ArrayBlockingQueue<>(capacity); }
@@ -18,21 +19,18 @@ class BoundedBuffer implements OrderQueue {
     public BoundedBuffer(int capacity) { this.capacity = capacity; }
 
     @Override public synchronized void put(Order order) throws InterruptedException {
-       while (items.size() >= capacity) {
+        while (items.size() == capacity) {
             wait();
         }
-
-        items.addLast(order);
+        items.add(order);
         notifyAll();
     }
     @Override public synchronized Order take() throws InterruptedException {
         while (items.isEmpty()) {
             wait();
         }
-
-        Order order = items.removeFirst();
+        Order o = items.removeFirst();
         notifyAll();
-
-        return order;
+        return o;
     }
 }
